@@ -6,10 +6,18 @@
 *    verção: 1.0
 */
 
+//inporta da blibioteca para manipular dados do banco de dados do mysql
+const knex = require('knex')
+
+// import do arquivo de configuração  para acesso ao banco de dados
+const knexDatabaseConfig = require('../../database/database_config/knexConfig.js')
+
+// Criar a conecção do banco de dados do MySQL 
+const knexConection = knex(knexDatabaseConfig.development)
+
 // função para inserir um novo filme no banco de dados
 const insertFilme = async function(filme){
-    let sql = `
-    insert into tbl_filmes (
+    let sql = `insert into tbl_filmes (
 	nome,
     sinopse,
     capa,
@@ -25,8 +33,15 @@ const insertFilme = async function(filme){
     '${filme.duracao}',
     '${filme.valor}',
     '${filme.avaliacao}'
-);
-    `
+);`
+
+    let result = await knexConection.raw(sql)
+
+    if(result){
+        return true
+    }else{
+        return false
+    }
 }
 
 //função para atualizar um filme já existente no banco de dados
