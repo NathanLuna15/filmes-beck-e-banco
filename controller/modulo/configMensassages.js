@@ -5,36 +5,52 @@
 */
 
 
-const DEFAUT_MENSSAGENS = {
-    api_descripition: 'API para controlar o objeto filmes',
-    development: 'Nathan Proença de Luna',
+const DEFAULT_MESSAGE = {
+    api_description: 'API para controlar o projeto de Filmes',
+    development: 'Kayque Brenno Ferreira Almeida',
     version: '1.0.4.26',
     status: Boolean,
-    statusCode: Number,
-    response: []
+    status_code: Number,
+    response: {}
 }
 
+//Mensagens de ERRO do projeto de filmes
 const ERROR_BAD_REQUEST = {
-    status: false, 
+    status: false,
     status_code: 400,
-    menssage: 'não foi possivel acessar a requisição devido a erros de entrada de dados'
+    message: 'Não foi possível processar a requisição devido a erros de entrada de dados.'
 }
 
-const SUCESS_CREATED_ITEM ={
-    status:true,
-    status_code:201,
-    menssage: 'item inserido com sucesso!'
-}
-
-const ERRO_INTERNAL_SERVER_MODEL ={
+const ERROR_INTERNAL_SERVER_MODEL = {
     status: false,
     status_code: 500,
-    menssage: 'não foi possivel processar o por erro do servidor'
+    message: 'Não foi possível processar a requisição devido a um erro interno no servidor [MODEL]'
 }
 
+const ERROR_CONTENT_TYPE = {
+    status: false,
+    status_code: 415,
+    message: 'Não foi possível processar a requisição, pois o formato de dados encaminhado não é suportado pelo servidor, apenas deve ser utilizado JSON.'
+}
 
-module.exports ={
-    DEFAUT_MENSSAGENS,
+const ERROR_INTERNAL_SERVER_CONTROLLER = {
+    status: false,
+    status_code: 500,
+    message: 'Não foi possível processar a requisição devido a um erro interno no servidor [CONTROLLER]'
+}
+
+//Mensagens de SUCESSO do projeto de filmes
+const SUCCESS_CREATED_ITEM = {
+    status: true,
+    status_code: 201,
+    message: 'Item inserido com sucesso!'
+}
+
+module.exports = {
+    DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
-    SUCESS_CREATED_ITEM
+    SUCCESS_CREATED_ITEM,
+    ERROR_INTERNAL_SERVER_MODEL,
+    ERROR_CONTENT_TYPE,
+    ERROR_INTERNAL_SERVER_CONTROLLER
 }

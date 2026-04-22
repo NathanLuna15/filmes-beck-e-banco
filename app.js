@@ -19,10 +19,14 @@ app.use(cors(corsOpitions))
 
 const controllerFilme = require('./controller/filme/controller_filmes.js')
 
+
+
 //EndPoints
 app.post('/v1/senai/locadora/filme',bodyParserJSON, async function(request, response){
     let dados = request.body
-    let result = await controllerFilme.inserirNovoFilme(dados)
+    let ContentType = request.headers['content-type']
+
+    let result = await controllerFilme.inserirNovoFilme(dados,ContentType)
 
     response.status(result.status_code)
     response.json(result)
