@@ -12,6 +12,7 @@ const knex = require('knex')
 // import do arquivo de configuração  para acesso ao banco de dados
 const knexDatabaseConfig = require('../../database/database_config/knexConfig.js')
 
+
 // Criar a conecção do banco de dados do MySQL 
 const knexConection = knex(knexDatabaseConfig.development)
 
@@ -53,23 +54,49 @@ const insertFilme = async function(filme){
 
 //função para atualizar um filme já existente no banco de dados
 const updateFilmes = async function(filme){
-    
+
 }
+
 
 // função para todos os dados do filame do banco de dados 
 const selectAllFilme = async function(){
+    try {
+        let sql = 'select * from tbl_filmes order by id desc'
 
+        let result = await knexConection.raw(sql)
+
+        if(Array.isArray(result)){
+            return result[0]
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
 }
 
 // função de retornar um filme filtrado pelo ID
-const selectByIdFilme = async function(){
+const selectByIdFilme = async function(id){
+    try {
+        let sql = `select * from tbl_filmes where id = ${id}`
+        let result = await knexConection.raw(sql)
+        if(Array.isArray(result)){
+            return result[0]
+        }else{
+            return false
+        }
 
+    } catch (error) {
+        
+    }
 }
 
 // função para excluir um filme filtrado pelo ID
 const deletFilme = async function(){
 
 }
+
 
 
 module.exports = {

@@ -50,7 +50,7 @@ const validarDados = async function (filme) {
 
 // função de inserir um novo filme
 const inserirNovoFilme = async function (filme, ContentType) {
-   
+
     try {
         // cria uma copia do JSON do arquivo de configuração da mensagens
         let customMenssagen = JSON.parse(JSON.stringify(mensagens))
@@ -73,10 +73,10 @@ const inserirNovoFilme = async function (filme, ContentType) {
                 return customMenssagen.DEFAULT_MESSAGE
             }
         } else {
-        return customMenssagen.ERROR_CONTENT_TYPE
+            return customMenssagen.ERROR_CONTENT_TYPEAA
         }
     } catch (error) {
-            
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 
 }
@@ -86,11 +86,56 @@ const atualizarFilme = async function () {
 }
 
 const listarFilme = async function () {
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
+    try {
+        let result = await filmeDAO.selectAllFilme()
+
+        if (result) {
+            if (result.length > 0) {
+                customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
+                customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
+                customMenssagen.DEFAULT_MESSAGE.response.filme = result
+                customMenssagen.DEFAULT_MESSAGE.response.count = result.length
+                return customMenssagen.DEFAULT_MESSAGE
+            } else {
+                return customMenssagen.ERRO_NOT_FONDI
+            }
+        } else {
+            return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+        }
+
+    } catch (error) {
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
-const buscarFilme = async function () {
+const buscarFilme = async function (id) {
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+    try {
+        if (String(id).replaceAll(' ', '') == '' || id == null || id == undefined || isNaN(id)) {
+            customMenssagen.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
+            return customMenssagen.ERROR_BAD_REQUEST
+        } else {
+            let result = await filmeDAO.selectByIdFilme(id)
+            if (result) {
+                if (result.length > 0) {
+                    customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
+                    customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
+                    customMenssagen.DEFAULT_MESSAGE.response.filme = result
+                    return customMenssagen.DEFAULT_MESSAGE
+                } else {
+                    return customMenssagen.ERRO_NOT_FONDI
+                }
+            } else {
+                return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
+            }
+        }    
 
+
+    } catch (error) {
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
 const excluirFilme = async function () {

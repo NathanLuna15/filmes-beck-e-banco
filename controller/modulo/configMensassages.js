@@ -45,6 +45,16 @@ const SUCCESS_CREATED_ITEM = {
     status_code: 201,
     message: 'Item inserido com sucesso!'
 }
+const ERRO_NOT_FONDI = {
+    status: false,
+    status_code: 404,
+    message: 'não foram encontrado para retorno para retorno'
+}
+
+const SUCCESS_RESPOSE ={
+    status: true,
+    status_code: 200,
+}
 
 module.exports = {
     DEFAULT_MESSAGE,
@@ -52,5 +62,7 @@ module.exports = {
     SUCCESS_CREATED_ITEM,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_CONTENT_TYPE,
-    ERROR_INTERNAL_SERVER_CONTROLLER
+    ERROR_INTERNAL_SERVER_CONTROLLER,
+    ERRO_NOT_FONDI,
+    SUCCESS_RESPOSE
 }
