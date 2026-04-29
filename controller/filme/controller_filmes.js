@@ -50,11 +50,12 @@ const validarDados = async function (filme) {
 
 // função de inserir um novo filme
 const inserirNovoFilme = async function (filme, ContentType) {
-
+    
+    //duvida??????????
     try {
         // cria uma copia do JSON do arquivo de configuração da mensagens
         let customMenssagen = JSON.parse(JSON.stringify(mensagens))
-
+                                                //duvida??????????
         if (String(ContentType).toUpperCase() == 'APPLICATION/JSON') {
             let validar = await validarDados(filme)
 
@@ -67,14 +68,16 @@ const inserirNovoFilme = async function (filme, ContentType) {
                     customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_CREATED_ITEM.status
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_CREATED_ITEM.status_code
                     customMenssagen.DEFAULT_MESSAGE.menssage = customMenssagen.SUCCESS_CREATED_ITEM.menssage
+                //duvida??????????
                 } else {//500
                     return customMenssagen.ERROR_INTERNAL_SERVER_MODEL//500
                 }
+                //duvida??????????
                 return customMenssagen.DEFAULT_MESSAGE
             }
         } else {
             return customMenssagen.ERROR_CONTENT_TYPEAA
-        }
+        }   
     } catch (error) {
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
     }
@@ -85,6 +88,7 @@ const atualizarFilme = async function () {
 
 }
 
+//duvida??????????
 const listarFilme = async function () {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
@@ -112,13 +116,14 @@ const listarFilme = async function () {
 
 const buscarFilme = async function (id) {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
-    try {
+    try {               //duvida??????????
         if (String(id).replaceAll(' ', '') == '' || id == null || id == undefined || isNaN(id)) {
             customMenssagen.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
             return customMenssagen.ERROR_BAD_REQUEST
         } else {
             let result = await filmeDAO.selectByIdFilme(id)
             if (result) {
+                    //duvida??????????
                 if (result.length > 0) {
                     customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
@@ -131,7 +136,6 @@ const buscarFilme = async function (id) {
                 return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
             }
         }    
-
 
     } catch (error) {
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER

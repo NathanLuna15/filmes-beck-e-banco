@@ -7,7 +7,7 @@
 
 const DEFAULT_MESSAGE = {
     api_description: 'API para controlar o projeto de Filmes',
-    development: 'Kayque Brenno Ferreira Almeida',
+    development: 'Nathan proença de luna',
     version: '1.0.4.26',
     status: Boolean,
     status_code: Number,
