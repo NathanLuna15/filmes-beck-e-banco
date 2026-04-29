@@ -56,6 +56,12 @@ const SUCCESS_RESPOSE ={
     status_code: 200,
 }
 
+const SUCCESS_UPDATE_ITEM = {
+    status: true,
+    status_code: 200,
+    message: 'item atualizado com sucesso?'
+}
+
 module.exports = {
     DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
@@ -64,5 +70,6 @@ module.exports = {
     ERROR_CONTENT_TYPE,
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERRO_NOT_FONDI,
-    SUCCESS_RESPOSE
+    SUCCESS_RESPOSE,
+    SUCCESS_UPDATE_ITEM
 }

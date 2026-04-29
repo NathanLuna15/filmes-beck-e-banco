@@ -22,6 +22,7 @@ const controllerFilme = require('./controller/filme/controller_filmes.js')
 
 
 //EndPoints
+
 app.post('/v1/senai/locadora/filme',bodyParserJSON, async function(request, response){
     let dados = request.body
     let ContentType = request.headers['content-type']
@@ -44,6 +45,22 @@ app.get('/v1/senai/locadora/filme/:id', async function(request, response){
     let result = await controllerFilme.buscarFilme(id)
     
     response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/filme/:id', bodyParserJSON, async function(request, response){
+    let ContentType = request.headers['content-type']
+    let id = request.params.id
+    let dados = request.body
+
+    // chama a funcao para atualizar o filme devemos encaminhar as 3 variaveis na mesma sequencia que a funcao foi criada na controller
+    let result = await controllerFilme.atualizarFilme(dados, id, ContentType)
+
+    console.log(result);
+    
+
+    response.status(result.status_code)
+    
     response.json(result)
 })
 
