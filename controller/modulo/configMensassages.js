@@ -62,6 +62,12 @@ const SUCCESS_UPDATE_ITEM = {
     message: 'item atualizado com sucesso?'
 }
 
+const SUCCESS_DELETE_ITEM = {
+    status: true,
+    status_code: 200,
+    message: 'item deletado com sucesso'
+}
+
 module.exports = {
     DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
@@ -71,5 +77,6 @@ module.exports = {
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERRO_NOT_FONDI,
     SUCCESS_RESPOSE,
-    SUCCESS_UPDATE_ITEM
+    SUCCESS_UPDATE_ITEM,
+    SUCCESS_DELETE_ITEM
 }

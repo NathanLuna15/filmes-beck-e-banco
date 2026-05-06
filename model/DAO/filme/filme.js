@@ -11,6 +11,7 @@ const knex = require('knex')
 
 // import do arquivo de configuração  para acesso ao banco de dados
 const knexDatabaseConfig = require('../../database/database_config/knexConfig.js')
+const e = require('cors')
 
 
 // Criar a conecção do banco de dados do MySQL 
@@ -42,7 +43,7 @@ const insertFilme = async function(filme){
         let result = await knexConection.raw(sql)
     
         if(result){
-            return true
+            return result[0].insertId
         }else{
             return false
         }
@@ -116,8 +117,20 @@ const selectByIdFilme = async function(id){
 }
 
 // função para excluir um filme filtrado pelo ID
-const deletFilme = async function(){
+const deletFilme = async function(id){
+    try {
+        let sql = `delete from tbl_filmes where id=${id}`
+        let result = await knexConection.raw(sql)
 
+        if(result){
+            return true
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
 }
 
 

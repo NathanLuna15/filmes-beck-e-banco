@@ -57,11 +57,18 @@ app.put('/v1/senai/locadora/filme/:id', bodyParserJSON, async function(request, 
     let result = await controllerFilme.atualizarFilme(dados, id, ContentType)
 
     console.log(result);
-    
-
     response.status(result.status_code)
     
     response.json(result)
+})
+
+app.delete('/v1/senai/locadora/filme/:id', async function(request, response){
+    let id = request.params.id
+    let result = await controllerFilme.excluirFilme(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+
 })
 
 app.listen(8080, function(){

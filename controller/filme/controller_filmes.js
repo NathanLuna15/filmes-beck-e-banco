@@ -7,7 +7,7 @@
 
 //inporte do arquivo de comfigurações de mensagens do projeto
 const mensagens = require('../modulo/configMensassages.js')
-//
+
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 
 const validarDados = async function (filme) {
@@ -18,7 +18,7 @@ const validarDados = async function (filme) {
         custonMenssagen.ERROR_BAD_REQUEST.field = '[NOME]  INVALIDO'
         return custonMenssagen.ERROR_BAD_REQUEST
 
-    } else if (filme.sinopse == undefined || filme.sinopse == '' || filme.sinopse == null ) {
+    } else if (filme.sinopse == undefined || filme.sinopse == '' || filme.sinopse == null) {
         custonMenssagen.ERROR_BAD_REQUEST.field = '[SINOPSE]  INVALIDO'
         return custonMenssagen.ERROR_BAD_REQUEST
 
@@ -30,7 +30,7 @@ const validarDados = async function (filme) {
         custonMenssagen.ERROR_BAD_REQUEST.field = '[DATA]  INVALIDO'
         return custonMenssagen.ERROR_BAD_REQUEST
 
-    } else if (filme.duracao == undefined || filme.duracao == "" || filme.duracao == null ||  filme.duracao < 5) {
+    } else if (filme.duracao == undefined || filme.duracao == "" || filme.duracao == null || filme.duracao < 5) {
         custonMenssagen.ERROR_BAD_REQUEST.field = '[DURAÇÃO]  INVALIDO'
         return custonMenssagen.ERROR_BAD_REQUEST
 
@@ -44,18 +44,30 @@ const validarDados = async function (filme) {
     } else {
         return false
     }
+}
 
+const tratarDados = async function(filme){
+
+    filme.nome = filme.nome.replaceAll("'", "")
+    filme.sinopse = filme.sinopse.replaceAll( "'", "")
+    filme.capa = filme.capa.replaceAll("'", "")
+    filme.data_lancamento = filme.data_lancamento.replaceAll("'", "")
+    filme.duracao = filme.duracao.replaceAll("'", "")
+    filme.valor = filme.valor.replaceAll("'", "")
+    filme.duracao = filme.duracao.replaceAll("'", "")
+    
+    return filme
 }
 
 
 // função de inserir um novo filme
 const inserirNovoFilme = async function (filme, ContentType) {
-    
-    //duvida??????????
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+
     try {
         // cria uma copia do JSON do arquivo de configuração da mensagens
-        let customMenssagen = JSON.parse(JSON.stringify(mensagens))
-                                                //duvida??????????
+        
+
         if (String(ContentType).toUpperCase() == 'APPLICATION/JSON') {
             let validar = await validarDados(filme)
 
@@ -63,23 +75,27 @@ const inserirNovoFilme = async function (filme, ContentType) {
                 return validar
             } else {
 
-                let result = await filmeDAO.insertFilme(filme)
+                let result = await filmeDAO.insertFilme(await tratarDados(filme))
                 if (result) {//201
+                    filme.id = result
                     customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_CREATED_ITEM.status
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_CREATED_ITEM.status_code
                     customMenssagen.DEFAULT_MESSAGE.menssage = customMenssagen.SUCCESS_CREATED_ITEM.menssage
-                //duvida??????????
+                    customMenssagen.DEFAULT_MESSAGE.response = filme
                 } else {//500
                     return customMenssagen.ERROR_INTERNAL_SERVER_MODEL//500
                 }
-                //duvida??????????
+
                 return customMenssagen.DEFAULT_MESSAGE
             }
         } else {
             return customMenssagen.ERROR_CONTENT_TYPEAA
-        }   
+        }
     } catch (error) {
+       console.log(error);
+       
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+        
     }
 
 }
@@ -88,47 +104,48 @@ const atualizarFilme = async function (filme, id, ContentType) {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
     try {
-        
-        if(String(ContentType).toUpperCase() == "APPLICATION/JSON"){
-            
+
+        if (String(ContentType).toUpperCase() == "APPLICATION/JSON") {
+
             //chama a função validarFilme e validar se o ID esta correto
             //se o ID existe no BD e se o filme existe
-            let resultBuscarFilme = await buscarFilme(id)
-            
-            if(resultBuscarFilme.status){
+            let resultBuscarFilme = await buscarFilme(await tratarDados(filme))
+
+            if (resultBuscarFilme.status) {
                 let validar = await validarDados(filme)
                 console.log(validar);
-                
-                if(!validar){
-                    
+
+                if (!validar) {
+
                     filme.id = Number(id)
 
                     // chama a função para atualizar o filme no BD
                     let result = await filmeDAO.updateFilmes(filme)
-                    if(result){
+                    if (result) {
                         customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_UPDATE_ITEM.status
                         customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_UPDATE_ITEM.status_code
                         customMenssagen.DEFAULT_MESSAGE.mensage = customMenssagen.SUCCESS_UPDATE_ITEM.mensage
+                        customMenssagen.DEFAULT_MESSAGE.response = filme
                         console.log('1');
-                        
+
                         return customMenssagen.DEFAULT_MESSAGE
-                    }else{
+                    } else {
                         console.log('2');
-                        
+
                         return customMenssagen.ERRO_NOT_FONDI // 404
                     }
-                }else{
+                } else {
                     console.log('3');
                     return validar // 500 model
                 }
 
-            }else{
+            } else {
                 console.log('4');
                 return resultBuscarFilme // 400(ID invalido) ou 400(não encontrado) ou 500 
             }
 
-        }else{
-            console.log('5');
+        } else {
+
             return customMenssagen.ERROR_CONTENT_TYPEAA
         }
 
@@ -139,7 +156,7 @@ const atualizarFilme = async function (filme, id, ContentType) {
     }
 }
 
-//duvida??????????
+
 const listarFilme = async function () {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
@@ -174,7 +191,7 @@ const buscarFilme = async function (id) {
         } else {
             let result = await filmeDAO.selectByIdFilme(id)
             if (result) {
-                    //duvida??????????
+
                 if (result.length > 0) {
                     customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
@@ -186,15 +203,39 @@ const buscarFilme = async function (id) {
             } else {
                 return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
             }
-        }    
+        }
 
     } catch (error) {
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
-const excluirFilme = async function () {
+const excluirFilme = async function (id) {
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
+    try {
+        //chama a função de buscar filme para validar se o filme existe
+        let resultBuscarFilme = await buscarFilme(id)
+
+        if (resultBuscarFilme.status) {
+            let result = await filmeDAO.deletFilme(id)
+            if (result) {
+                customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_DELETE_ITEM.status
+                customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_DELETE_ITEM.status_code
+                customMenssagen.DEFAULT_MESSAGE.message = customMenssagen.SUCCESS_DELETE_ITEM.message
+
+                return customMenssagen.DEFAULT_MESSAGE
+            } else {
+                return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
+            }
+
+        } else {
+            return resultBuscarFilme
+        }
+
+    } catch (error) {
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER//500
+    }
 }
 
 module.exports = {
@@ -203,5 +244,5 @@ module.exports = {
     listarFilme,
     buscarFilme,
     excluirFilme,
-
+    tratarDados
 }
