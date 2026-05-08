@@ -13,7 +13,7 @@ const filmeDAO = require('../../model/DAO/filme/filme.js')
 const validarDados = async function (filme) {
     // cria uma copia do JSON do arquivo de configuração da mensagens
     let custonMenssagen = JSON.parse(JSON.stringify(mensagens))
-
+    
     if (filme.nome == undefined || filme.nome == '' || filme.nome == null || filme.nome.length > 80) {
         custonMenssagen.ERROR_BAD_REQUEST.field = '[NOME]  INVALIDO'
         return custonMenssagen.ERROR_BAD_REQUEST
