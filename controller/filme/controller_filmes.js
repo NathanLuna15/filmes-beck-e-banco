@@ -62,11 +62,10 @@ const tratarDados = async function(filme){
 
 // função de inserir um novo filme
 const inserirNovoFilme = async function (filme, ContentType) {
+     // cria uma copia do JSON do arquivo de configuração da mensagens
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
     try {
-        // cria uma copia do JSON do arquivo de configuração da mensagens
-        
 
         if (String(ContentType).toUpperCase() == 'APPLICATION/JSON') {
             let validar = await validarDados(filme)

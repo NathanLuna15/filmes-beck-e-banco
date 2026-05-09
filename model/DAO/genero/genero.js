@@ -33,10 +33,20 @@ const insertGenero = async function(genero){
    }
 }
 
-const inserir = async function (genero){
+const update = async function (genero){
     try {
+        let sql = `update tbl_genero set
+                    genero = '${genero.genero}';`
+
+        let result = await knexConection.raw(sql)
+        
+        if(result){
+            return true
+        }else{
+            return false
+        }
         
     } catch (error) {
-        
+        return false
     }
 }
