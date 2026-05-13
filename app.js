@@ -18,10 +18,11 @@ const corsOpitions = {
 app.use(cors(corsOpitions))
 
 const controllerFilme = require('./controller/filme/controller_filmes.js')
+const controllerGenero = require('./controller/genero/controller_genero.js')
 
 
 
-//EndPoints
+//EndPoints  filme
 
 app.post('/v1/senai/locadora/filme',bodyParserJSON, async function(request, response){
     let dados = request.body
@@ -69,6 +70,26 @@ app.delete('/v1/senai/locadora/filme/:id', async function(request, response){
     response.status(result.status_code)
     response.json(result)
 
+})
+
+
+//EndPoints  genero 
+
+app.post('/v1/senai/locadora/genero', bodyParserJSON, async function(request, response){
+    let dados = request.body
+    let ContentType = request.headers['content-type']
+
+    let result = await controllerGenero.inserirDados(dados,ContentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/genero/:id', async function(request,response){
+    let id = request.params.id
+    let result = await controllerGenero.buscarGenero(id)
+    
+    response.status(result.status_code)
+    response.json(result)
 })
 
 app.listen(8080, function(){

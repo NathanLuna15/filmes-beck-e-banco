@@ -73,7 +73,7 @@ const inserirNovoFilme = async function (filme, ContentType) {
             if (validar) {
                 return validar
             } else {
-
+                
                 let result = await filmeDAO.insertFilme(await tratarDados(filme))
                 if (result) {//201
                     filme.id = result
@@ -88,7 +88,7 @@ const inserirNovoFilme = async function (filme, ContentType) {
                 return customMenssagen.DEFAULT_MESSAGE
             }
         } else {
-            return customMenssagen.ERROR_CONTENT_TYPEAA
+            return customMenssagen.ERROR_CONTENT_TYPE
         }
     } catch (error) {
        console.log(error);
@@ -183,7 +183,8 @@ const listarFilme = async function () {
 
 const buscarFilme = async function (id) {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
-    try {               //duvida??????????
+    
+     try {               
         if (id == undefined || String(id).replaceAll(' ', '') == '' || id == null || isNaN(id)) {
             customMenssagen.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
             return customMenssagen.ERROR_BAD_REQUEST

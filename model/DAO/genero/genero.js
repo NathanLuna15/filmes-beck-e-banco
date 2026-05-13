@@ -9,6 +9,11 @@ const e = require('cors')
 // Criar a conecção do banco de dados do MySQL 
 const knexConection = knex(knexDatabaseConfig.development)
 
+const listarGenero = async function(genero){
+
+}
+
+
 
 const insertGenero = async function(genero){
    
@@ -16,8 +21,8 @@ const insertGenero = async function(genero){
     
     let sql = `insert into tbl_genero (
                     genero
-                ) values(
-                    "${genero.genero}"
+                ) values (
+                    '${genero.genero}'
                 );`
             
     let result = await knexConection.raw(sql)
@@ -36,7 +41,8 @@ const insertGenero = async function(genero){
 const update = async function (genero){
     try {
         let sql = `update tbl_genero set
-                    genero = '${genero.genero}';`
+                    genero = '${genero.genero}'
+                    where id = ${genero.id};`
 
         let result = await knexConection.raw(sql)
         
@@ -49,4 +55,28 @@ const update = async function (genero){
     } catch (error) {
         return false
     }
+}
+
+
+const selectByIdGenero = async function(id){
+try {
+    let sql = `select * from tbl_genero where id = ${id};`
+
+    let result = await knexConection.raw(sql)
+    if(Array.isArray(result)){
+        return result[0]
+    }else{
+        return false
+    }
+    
+} catch (error) {
+    return false
+}
+}
+
+
+module.exports = {
+    insertGenero,
+    update,
+    selectByIdGenero
 }

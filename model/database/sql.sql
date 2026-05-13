@@ -48,13 +48,40 @@ insert into tbl_filmes (
     '4'
 );
 
-select * from tbl_filmes;
+create table tbl_genero(
+	id int not null auto_increment primary key,
+    genero varchar(40) not null 
+);
+
+insert into tbl_genero (
+	genero
+) values(
+	"ficção"
+);
+
+select * from tbl_genero;
+
+create table tbl_clacificacao(
+	id int not null auto_increment primary key,
+    clacificacao varchar(6) not null
+);
 
 
+create table tbl_nacionalidade(
+	id int not null auto_increment primary key,
+    nacionalidade varchar(70) not null,
+    sigla varchar(3) not null
+);
 
+create table tbl_foto(
+	id int not null auto_increment primary key,
+    url_foto varchar(250) not null
+);
 
-
-
-
+create table tbl_sexo(
+	id int not null auto_increment primary key,
+	sexo varchar(20) not null,
+    sigla varchar(3) not null
+);
 
 
