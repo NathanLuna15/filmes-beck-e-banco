@@ -3,17 +3,9 @@ const knex = require('knex')
 
 // import do arquivo de configuração  para acesso ao banco de dados
 const knexDatabaseConfig = require('../../database/database_config/knexConfig.js')
-const e = require('cors')
-
 
 // Criar a conecção do banco de dados do MySQL 
 const knexConection = knex(knexDatabaseConfig.development)
-
-const listarGenero = async function(genero){
-
-}
-
-
 
 const insertGenero = async function(genero){
    
@@ -90,10 +82,29 @@ try {
 }
 }
 
+const deletGenero = async function(id){
+    try {
+        let sql = `delete from tbl_filmes where id=${id}`
+        let result = await knexConection.raw(sql)
+
+        if(result){
+            return true
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        console.log(error);
+        
+        return false
+    }
+}
+
 
 module.exports = {
     insertGenero,
     update,
     selectByIdGenero,
-    selectGenero
+    selectGenero,
+    deletGenero
 }

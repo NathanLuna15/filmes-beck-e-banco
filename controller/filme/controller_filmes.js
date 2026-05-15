@@ -48,13 +48,13 @@ const validarDados = async function (filme) {
 
 const tratarDados = async function(filme){
 
-    filme.nome = filme.nome.replaceAll("'", "")
-    filme.sinopse = filme.sinopse.replaceAll( "'", "")
-    filme.capa = filme.capa.replaceAll("'", "")
-    filme.data_lancamento = filme.data_lancamento.replaceAll("'", "")
-    filme.duracao = filme.duracao.replaceAll("'", "")
-    filme.valor = filme.valor.replaceAll("'", "")
-    filme.duracao = filme.duracao.replaceAll("'", "")
+    filme.nome =                filme.nome.replaceAll("'", "")
+    filme.sinopse =             filme.sinopse.replaceAll( "'", "")
+    filme.capa =                filme.capa.replaceAll("'", "")
+    filme.data_lancamento =     filme.data_lancamento.replaceAll("'", "")
+    filme.duracao =             filme.duracao.replaceAll("'", "")
+    filme.valor =               filme.valor.replaceAll("'", "")
+    filme.avaliacao =             filme.avaliacao.replaceAll("'", "")
     
     return filme
 }
@@ -105,7 +105,7 @@ const atualizarFilme = async function (filme, id, ContentType) {
     try {
 
         if (String(ContentType).toUpperCase() == "APPLICATION/JSON") {
-
+            filme.id = Number(id)
             //chama a função validarFilme e validar se o ID esta correto
             //se o ID existe no BD e se o filme existe
             let resultBuscarFilme = await buscarFilme(await tratarDados(filme))
@@ -115,8 +115,6 @@ const atualizarFilme = async function (filme, id, ContentType) {
                 console.log(validar);
 
                 if (!validar) {
-
-                    filme.id = Number(id)
 
                     // chama a função para atualizar o filme no BD
                     let result = await filmeDAO.updateFilmes(filme)
@@ -149,6 +147,8 @@ const atualizarFilme = async function (filme, id, ContentType) {
 
     } catch (error) {
         console.log(error)
+        console.log('1');
+        
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER //500
 
     }
@@ -180,15 +180,15 @@ const listarFilme = async function () {
     }
 }
 
-const buscarFilme = async function (id) {
+const buscarFilme = async function (filme) {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
     
      try {               
-        if (id == undefined || String(id).replaceAll(' ', '') == '' || id == null || isNaN(id)) {
+        if (filme.id == undefined || String(filme.id).replaceAll(' ', '') == '' || filme.id == null || isNaN(filme.id)) {
             customMenssagen.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
             return customMenssagen.ERROR_BAD_REQUEST
         } else {
-            let result = await filmeDAO.selectByIdFilme(id)
+            let result = await filmeDAO.selectByIdFilme(filme.id)
             if (result) {
 
                 if (result.length > 0) {
@@ -225,7 +225,7 @@ const excluirFilme = async function (id) {
 
                 return customMenssagen.DEFAULT_MESSAGE
             } else {
-                return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
+                        return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
             }
 
         } else {

@@ -11,7 +11,6 @@ const knex = require('knex')
 
 // import do arquivo de configuração  para acesso ao banco de dados
 const knexDatabaseConfig = require('../../database/database_config/knexConfig.js')
-const e = require('cors')
 
 
 // Criar a conecção do banco de dados do MySQL 

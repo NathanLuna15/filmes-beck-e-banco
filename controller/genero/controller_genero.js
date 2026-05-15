@@ -6,7 +6,7 @@ const { json } = require('body-parser')
 const validarDados = async function(genero){
     let custonMenssagen = JSON.parse(JSON.stringify(mensagens))
 
-    if(genero.genero == undefined || genero.genero == null || genero.nome == '' || genero.genero.length == 40 ){
+    if(genero.genero == undefined || genero.genero == null || genero.genero == '' || genero.genero.length == 40 ){
         return custonMenssagen.ERROR_BAD_REQUEST.field = '[GENERO]  INVALIDO'
     }else{
         return false
@@ -84,7 +84,7 @@ const atualizarDados = async function(genero, id, ContentType){
     try {
         if(String(ContentType).toUpperCase() == "APPLICATION/JSON"){
 
-            let resultBuscaID = await buscarGenero(await tratarDados(genero))
+            let resultBuscaID = await buscarGenero(id)
 
 
             if(resultBuscaID.status){
@@ -102,11 +102,9 @@ const atualizarDados = async function(genero, id, ContentType){
 
                         return customMenssagen.DEFAULT_MESSAGE
                     }else{
-                        console.log('1')
                         return customMenssagen.ERRO_NOT_FONDI
                     }
                 }else{
-                    console.log('2')
                     return validar
                 }  
 
@@ -161,9 +159,45 @@ const buscarGenero = async function(id){
 }
 
 
+const deletarGenero = async function(id){
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+    try {
+       let buscar = await buscarGenero(id)
+
+        if(buscar.status){
+            let result = await generoDAO.deletGenero(id)
+
+            if(result){
+                
+                customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_DELETE_ITEM.status
+                customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_DELETE_ITEM.status_code
+                customMenssagen.DEFAULT_MESSAGE.message = customMenssagen.SUCCESS_DELETE_ITEM.message
+
+                return customMenssagen.DEFAULT_MESSAGE
+
+            }else{
+                console.log('2');
+                return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
+            }
+        }else{
+            console.log('3');
+            
+            return buscar
+        }
+
+    } catch (error) {
+        console.log(error);
+        
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+
+    }
+}
+
+
 module.exports = {
     inserirDados,
     buscarGenero,
     atualizarDados,
-    listarGenero
+    listarGenero,
+    deletarGenero
 }
