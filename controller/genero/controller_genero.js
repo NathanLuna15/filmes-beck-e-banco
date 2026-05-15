@@ -53,13 +53,40 @@ const inserirDados = async function(genero, ContentType){
     }
 }
 
+const listarGenero = async function(){
+        let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+    
+        try {
+            let result = await generoDAO.selectGenero()
+    
+            if (result) {
+                if (result.length > 0) {
+                    customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
+                    customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
+                    customMenssagen.DEFAULT_MESSAGE.response.filme = result
+                    customMenssagen.DEFAULT_MESSAGE.response.count = result.length
+                    return customMenssagen.DEFAULT_MESSAGE
+                } else {
+                    return customMenssagen.ERRO_NOT_FONDI
+                }
+            } else {
+                return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+            }
+    
+        } catch (error) {
+            return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+        }
+}
+
 const atualizarDados = async function(genero, id, ContentType){
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+    
     try {
         if(String(ContentType).toUpperCase() == "APPLICATION/JSON"){
 
             let resultBuscaID = await buscarGenero(await tratarDados(genero))
-           
+
+
             if(resultBuscaID.status){
                 let validar = await validarDados(genero)
 
@@ -75,22 +102,28 @@ const atualizarDados = async function(genero, id, ContentType){
 
                         return customMenssagen.DEFAULT_MESSAGE
                     }else{
+                        console.log('1')
                         return customMenssagen.ERRO_NOT_FONDI
                     }
                 }else{
+                    console.log('2')
                     return validar
                 }  
 
             }else{
-
+                console.log('3')
+                return resultBuscaID
             }
   
-
+        }else{
+            console.log('4')
+            return customMenssagen.ERROR_CONTENT_TYPE
         }
 
 
     } catch (error) {
-        
+        console.log(error)
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
@@ -131,5 +164,6 @@ const buscarGenero = async function(id){
 module.exports = {
     inserirDados,
     buscarGenero,
-    atualizarDados
+    atualizarDados,
+    listarGenero
 }

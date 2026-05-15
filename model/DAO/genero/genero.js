@@ -38,6 +38,22 @@ const insertGenero = async function(genero){
    }
 }
 
+const selectGenero = async function(){
+    try {
+        let sql = 'select * from tbl_genero order by id desc;'
+        let result = await knexConection.raw(sql)
+        
+        if(Array.isArray(result)){
+            return result[0]  
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
+}
+
 const update = async function (genero){
     try {
         let sql = `update tbl_genero set
@@ -78,5 +94,6 @@ try {
 module.exports = {
     insertGenero,
     update,
-    selectByIdGenero
+    selectByIdGenero,
+    selectGenero
 }

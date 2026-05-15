@@ -144,8 +144,7 @@ const atualizarFilme = async function (filme, id, ContentType) {
             }
 
         } else {
-
-            return customMenssagen.ERROR_CONTENT_TYPEAA
+            return customMenssagen.ERROR_CONTENT_TYPE
         }
 
     } catch (error) {
