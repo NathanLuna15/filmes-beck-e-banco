@@ -8,14 +8,14 @@ const knexDatabaseConfig = require('../../database/database_config/knexConfig.js
 const knexConection = knex(knexDatabaseConfig.development)
 
 
-const insertGenero = async function(clacificacao){
+const insertClassificacao = async function(classificacao){
    
    try {
     
     let sql = `insert into tbl_clacificacao (
                     clacificacao
                 ) values (
-                    '${clacificacao.clacificacao}'
+                    '${classificacao.clacificacao}'
                 );`
             
     let result = await knexConection.raw(sql)
@@ -29,4 +29,11 @@ const insertGenero = async function(clacificacao){
    } catch (error) {
      return false
    }
+}
+ 
+
+
+module.exports = {
+    insertClassificacao
+ 
 }
