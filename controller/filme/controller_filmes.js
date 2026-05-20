@@ -10,6 +10,9 @@ const mensagens = require('../modulo/configMensassages.js')
 
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 
+//controllers
+const controllerclassificacao = require('../classificacao/controller_classificacao.js')
+
 const validarDados = async function (filme) {
     // cria uma copia do JSON do arquivo de configuração da mensagens
     let custonMenssagen = JSON.parse(JSON.stringify(mensagens))
@@ -132,7 +135,7 @@ const atualizarFilme = async function (filme, id, ContentType) {
                     } else {
                         console.log('2');
 
-                        return customMenssagen.ERRO_NOT_FONDI // 404
+                        return customMenssagen.ERROR_INTERNAL_SERVER_MODEL // 404
                     }
                 } else {
                     console.log('3');
@@ -166,6 +169,23 @@ const listarFilme = async function () {
 
         if (result) {
             if (result.length > 0) {
+
+                //manipulação dos dados da classificação
+                //percorre o Array de filmes 
+                for(filme of result){
+                    // busca na controller da classificação o ID referente a FK da classificação
+                    let resultClassificacao = await controllerclassificacao.buscarClassificacao(filme.id_classificacao)
+                    
+                    // se encontrar o id
+                    if(resultClassificacao.status){
+                        //adiciona um atributo na classificação no JSON do filme e colar o resultado com os dados da 
+                        //classificação
+                        filme.classificacao = resultClassificacao.response.classificacao
+                        //apaga o id_classificação
+                        delete filme
+                    }
+                }
+
                 customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
                 customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
                 customMenssagen.DEFAULT_MESSAGE.response.filme = result

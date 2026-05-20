@@ -1,7 +1,6 @@
 const mensagens = require('../modulo/configMensassages.js')
 
 const generoDAO = require('../../model/DAO/genero/genero.js')
-const { json } = require('body-parser')
 
 const validarDados = async function(genero){
     let custonMenssagen = JSON.parse(JSON.stringify(mensagens))

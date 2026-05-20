@@ -19,7 +19,7 @@ app.use(cors(corsOpitions))
 
 const controllerFilme = require('./controller/filme/controller_filmes.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
-const controllerclassificacao = require('./controller/classificacao/controller_classificacao.js')
+const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
 
 
 
@@ -127,10 +127,59 @@ app.post('/v1/senai/locadora/classificacao', bodyParserJSON, async function(requ
     let dados = request.body
     let ContentType = request.headers['content-type']
 
-    let result = await controllerclassificacao.inserirDados(dados,ContentType)
+    let result = await controllerClassificacao.inserirNovaClassificacao(dados,ContentType)
     response.status(result.status_code)
     response.json(result)
 })
+
+app.get('/v1/senai/locadora/classificacao', async function(request, response){
+    let result = await controllerClassificacao.listarClassificacao()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/classificacao/:id', async function(request,response){
+    let id = request.params.id
+    let result = await controllerClassificacao.buscarClassificacao(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/classificacao/:id', bodyParserJSON, async function(request, response){
+    let ContentType = request.headers['content-type']
+    let id = request.params.id
+    let dados = request.body
+
+    let result = await controllerClassificacao.atualizarclassificacao(dados, id, ContentType)
+    console.log(result);
+    response.status(result.status_code)
+    
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/classificacao/:id', async function(request, response){
+    let id = request.params.id
+    let result = await controllerClassificacao.deletarclassificacao(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
