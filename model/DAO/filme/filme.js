@@ -28,7 +28,8 @@ const insertFilme = async function(filme){
         data_lancamento,
         duracao,
         valor,
-        avaliacao
+        avaliacao,
+        id_classificacao
     ) values (
         '${filme.nome}',
         '${filme.sinopse}',
@@ -37,6 +38,7 @@ const insertFilme = async function(filme){
         '${filme.duracao}',
         '${filme.valor}',
         if('${filme.avaliacao}' = '', null, '${filme.avaliacao}')
+        ${filme.id_classificacao}
     );`
     
         let result = await knexConection.raw(sql)
@@ -62,6 +64,7 @@ const updateFilmes = async function(filme){
                      data_lancamento = '${filme.data_lancamento}',
                      valor = '${filme.valor}',
                      avaliacao = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}')
+                     id_classificacao = ${filme.id_classificacao}
                      where id = ${filme.id};`
 
         let result = await knexConection.raw(sql)

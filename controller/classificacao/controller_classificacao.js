@@ -6,7 +6,7 @@ const { json } = require('body-parser')
 const validarDados = async function(classificacao){
     let custonMenssagen = JSON.parse(JSON.stringify(mensagens))
 
-    if(classificacao.classificacao == undefined || classificacao.classificacao == null || classificacao.classificacao == '' || classificacao.classificacao.length > 6 ){
+    if(classificacao.classificacao == undefined || classificacao.classificacao == null || classificacao.classificacao == '' || classificacao.classificacao.length == 6 ){
         return custonMenssagen.ERROR_BAD_REQUEST.field = '[CLASSIFICAÇÃO]  INVALIDA'
     }else{
         return false
@@ -14,7 +14,7 @@ const validarDados = async function(classificacao){
 }
 
 const tratarDados = async function(classificacao){
-    classificacao.classificacao = classificacao.replaceAll("'", "")
+    classificacao.classificacao = classificacao.classificacao.replaceAll("'", "")
     return classificacao
 }
 
@@ -29,9 +29,11 @@ const inserirDados = async function(classificacao, ContentType){
             if(validar){
                 return true
             }else{
-                let result = await generoDAO.insertGenero(await tratarDados(classificacao))
+                let result = await classificacaoDAO.insertClassificacao(await tratarDados(classificacao))
                 
                 if(result){
+                    console.log('0');
+                    
                     classificacao.id = result
                     customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_CREATED_ITEM.status
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_CREATED_ITEM.status_code
@@ -39,16 +41,20 @@ const inserirDados = async function(classificacao, ContentType){
                     customMenssagen.DEFAULT_MESSAGE.response = classificacao
                     
                 }else{
+                    console.log('1');
                     return customMenssagen.ERROR_INTERNAL_SERVER_MODEL//500
                 }
+                console.log('2');
                 return customMenssagen.DEFAULT_MESSAGE
             }
         }else{
+            console.log('3');
             return customMenssagen.ERROR_CONTENT_TYPE
         }
 
     } catch (error) {
-
+        console.log('4');
+        console.log(error);
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }

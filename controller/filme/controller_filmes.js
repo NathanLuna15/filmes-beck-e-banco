@@ -41,7 +41,10 @@ const validarDados = async function (filme) {
     } else if (filme.avaliacao == undefined || isNaN(filme.avaliacao) || filme.avaliacao.length > 3) {
         custonMenssagen.ERROR_BAD_REQUEST.field = '[AVALIAÇÃO]  INVALIDO'
         return custonMenssagen.ERROR_BAD_REQUEST
-    } else {
+    }else if(filme.id_classificacao == undefined || filme.id_classificacao == null || isNaN(filme.id_classificacao) || filme.id_classificacao <= 0){
+        custonMenssagen.ERROR_BAD_REQUEST.field = '[ID_CLASSIFICACAO] INVALIDO' // verificação da chave estrangeira 
+        return custonMenssagen.ERROR_BAD_REQUEST
+    }else {
         return false
     }
 }

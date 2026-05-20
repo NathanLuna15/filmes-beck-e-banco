@@ -12,7 +12,7 @@ const insertClassificacao = async function(classificacao){
    
    try {
     
-    let sql = `insert into tbl_clacificacao (
+    let sql = `insert into tbl_classificacao (
                     clacificacao
                 ) values (
                     '${classificacao.clacificacao}'
