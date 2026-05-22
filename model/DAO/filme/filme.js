@@ -88,7 +88,6 @@ const selectAllFilme = async function(){
         let sql = 'select * from tbl_filmes order by id desc'
 
         let result = await knexConection.raw(sql)
-        //duvida??????????
         if(Array.isArray(result)){
             return result[0]  
         }else{

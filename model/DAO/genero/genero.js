@@ -84,7 +84,7 @@ try {
 
 const deletGenero = async function(id){
     try {
-        let sql = `delete from tbl_filmes where id=${id}`
+        let sql = `delete from tbl_genero where id=${id}`
         let result = await knexConection.raw(sql)
 
         if(result){
