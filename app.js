@@ -58,7 +58,7 @@ app.put('/v1/senai/locadora/filme/:id', bodyParserJSON, async function(request, 
     // chama a funcao para atualizar o filme devemos encaminhar as 3 variaveis na mesma sequencia que a funcao foi criada na controller
     let result = await controllerFilme.atualizarFilme(dados, id, ContentType)
 
-    console.log(result);
+    // console.log(result);
     response.status(result.status_code)
     
     response.json(result)
@@ -107,7 +107,7 @@ app.put('/v1/senai/locadora/genero/:id', bodyParserJSON, async function(request,
 
     // chama a funcao para atualizar o filme devemos encaminhar as 3 variaveis na mesma sequencia que a funcao foi criada na controller
     let result = await controllerGenero.atualizarDados(dados, id, ContentType)
-    console.log(result);
+    // console.log(result);
     response.status(result.status_code)
     
     response.json(result)
@@ -153,7 +153,7 @@ app.put('/v1/senai/locadora/classificacao/:id', bodyParserJSON, async function(r
     let dados = request.body
 
     let result = await controllerClassificacao.atualizarclassificacao(dados, id, ContentType)
-    console.log(result);
+    // console.log(result);
     response.status(result.status_code)
     
     response.json(result)
@@ -166,22 +166,6 @@ app.delete('/v1/senai/locadora/classificacao/:id', async function(request, respo
     response.status(result.status_code)
     response.json(result)
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(8080, function(){
     console.log("API aguardando novas requisiçoes...")

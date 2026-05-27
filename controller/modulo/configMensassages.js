@@ -68,6 +68,13 @@ const SUCCESS_DELETE_ITEM = {
     message: 'item deletado com sucesso'
 }
 
+const SUCCESS_CREATED_ITEM_WARING = {
+    status: true,
+    status_code: 200,
+    message: 'Item inserido com sucesso! poren algun dados tivrão problemas no cadrasto [DADOS RELACIONAMENTO]'
+}
+
+
 module.exports = {
     DEFAULT_MESSAGE,
     ERROR_BAD_REQUEST,
@@ -78,5 +85,6 @@ module.exports = {
     ERRO_NOT_FONDI,
     SUCCESS_RESPOSE,
     SUCCESS_UPDATE_ITEM,
-    SUCCESS_DELETE_ITEM
+    SUCCESS_DELETE_ITEM,
+    SUCCESS_CREATED_ITEM_WARING
 }

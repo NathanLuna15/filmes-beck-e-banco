@@ -26,6 +26,7 @@ const insertGenero = async function(genero){
     }
 
    } catch (error) {
+    console.log(error)
      return false
    }
 }

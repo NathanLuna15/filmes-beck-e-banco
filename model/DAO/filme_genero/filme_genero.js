@@ -12,9 +12,11 @@ const insertFilmeGenero = async function(filmeGenero){
    try {
     
     let sql = `insert into tbl_filme_genero (
-                    genero
+                    id_filmes,
+                    id_genero
                 ) values (
-                    '${filmeGenero.filmeGenero}'
+                    '${filmeGenero.id_filme}',
+                    '${filmeGenero.id_genero}'
                 );`
             
     let result = await knexConection.raw(sql)
@@ -83,14 +85,18 @@ try {
 }
 
 //funçãi para retornar os dados do genero filtrado pelo ID do filme  
-const selectGeneroByIdFilme = async function(id){
+const selectGeneroByIdFilme = async function(idFilme){
     try {
-        let sql = ` select tbl_genero.*
+        let sql = `select tbl_genero.*
                     from tbl_filmes
-                        inner join tbl_filmes_genero 
-                            on tbl_filmes.id = tbl_filmes_genero.id_filmes 
-                    where tbl_filmes_id = ${id};`
+                        inner join tbl_filme_genero
+                            on tbl_filmes.id = tbl_filme_genero.id_filmes
+						inner join tbl_genero
+							on tbl_genero.id = tbl_filme_genero.id_genero
+                    where tbl_filmes.id = ${idFilme};`
     
+        // console.log(sql);
+        
         let result = await knexConection.raw(sql)
         if(Array.isArray(result)){
             return result[0]
@@ -99,6 +105,7 @@ const selectGeneroByIdFilme = async function(id){
         }
         
     } catch (error) {
+
         return false
     }
     }
@@ -144,6 +151,24 @@ const deletFilmeGenero = async function(id){
         return false
     }
 }
+// função para escluir o genero do filme (função utilizada no put do filme)
+const deletGenerosByIdFilme = async function(idFilme){
+    try {
+        let sql = `delete from tbl_filme_genero where id_filmes=${idFilme}`
+        let result = await knexConection.raw(sql)
+
+        if(result){
+            return true
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        // console.log(error);
+        
+        return false
+    }
+}
 
 
 module.exports = {
@@ -153,5 +178,6 @@ module.exports = {
     selectByIdFilmeGenero,
     deletFilmeGenero,
     selectGeneroByIdFilme,
-    selectFilmesByIdGenero
+    selectFilmesByIdGenero,
+    deletGenerosByIdFilme
 }

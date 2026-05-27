@@ -37,7 +37,7 @@ const insertFilme = async function(filme){
         '${filme.data_lancamento}',
         '${filme.duracao}',
         '${filme.valor}',
-        if('${filme.avaliacao}' = '', null, '${filme.avaliacao}')
+        if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
         ${filme.id_classificacao}
     );`
     
@@ -49,6 +49,8 @@ const insertFilme = async function(filme){
             return false
         }
     } catch (error) {
+        console.log(error);
+        
         return false
     }
    
@@ -63,7 +65,7 @@ const updateFilmes = async function(filme){
                      capa = '${filme.capa}',
                      data_lancamento = '${filme.data_lancamento}',
                      valor = '${filme.valor}',
-                     avaliacao = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}')
+                     avaliacao = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
                      id_classificacao = ${filme.id_classificacao}
                      where id = ${filme.id};`
 
@@ -76,6 +78,7 @@ const updateFilmes = async function(filme){
              return false
 
     } catch (error) {
+        console.log(error);
         
         return false
     }
