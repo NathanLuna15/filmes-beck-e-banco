@@ -20,7 +20,7 @@ app.use(cors(corsOpitions))
 const controllerFilme = require('./controller/filme/controller_filmes.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
-
+const controller_sexo = require('./controller/sexo/controller_sexo.js')
 
 
 //EndPoints  filme
@@ -166,6 +166,46 @@ app.delete('/v1/senai/locadora/classificacao/:id', async function(request, respo
     response.status(result.status_code)
     response.json(result)
 })
+
+
+//EndPoints  Sexo **********************************************
+
+app.post('/v1/senai/locadora/sexo', bodyParserJSON, async function(request, response){
+    let dados = request.body
+    let ContentType = request.headers['content-type']
+
+    let result = await controller_sexo.inserirDados(dados,ContentType)
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/sexo', async function(request, response){
+    let result = await controller_sexo.listarSexo()
+
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.get('/v1/senai/locadora/sexo/:id', async function(request,response){
+    let id = request.params.id
+    let result = await controller_sexo.buscarSexo(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(8080, function(){
     console.log("API aguardando novas requisiçoes...")
