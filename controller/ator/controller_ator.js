@@ -14,7 +14,7 @@ const validarDados = async function(ator){
 }    
 
 const tratarDados = async function(ator){
-    ator.nome = ator.data_nacimento.replaceAll("'", "")
+    ator.nome = ator.nome.replaceAll("'", "")
     ator.data_nacimento = ator.data_nacimento.replaceAll("'", '')
     return ator
 }
@@ -40,20 +40,169 @@ const inserirAtor = async function(ator, ContentType) {
                     customMenssagen.DEFAULT_MESSAGE.response = ator
 
                 }else{
+                    console.log("1");
+                    
                     return customMenssagen.ERROR_INTERNAL_SERVER_MODEL//500
                 }
-
+                console.log("2");
                 return customMenssagen.DEFAULT_MESSAGE
             }
         }else{
+            console.log("3");
             return customMenssagen.ERROR_CONTENT_TYPE
         }
 
     } catch (error) {
+        console.log("4");
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
 
+const listarAtor = async function(){
+        let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+    
+        try {
+            let result = await atorDAO.selectAtor()
+    
+            if (result) {
+                if (result.length > 0) {
+                    customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
+                    customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
+                    customMenssagen.DEFAULT_MESSAGE.response.filme = result
+                    customMenssagen.DEFAULT_MESSAGE.response.count = result.length
+                    return customMenssagen.DEFAULT_MESSAGE
+                } else {
+                    return customMenssagen.ERRO_NOT_FONDI
+                }
+            } else {
+                return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+            }
+    
+        } catch (error) {
+            return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+        }
+}
+
+const atualizarDados = async function(ator, id, ContentType){
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+    
+    try {
+        if(String(ContentType).toUpperCase() == "APPLICATION/JSON"){
+
+            let resultBuscaID = await atorDAO.updateAtor(id)
+
+
+            if(resultBuscaID.status){
+                let validar = await validarDados(ator)
+
+                if(!validar){
+                    ator.id = Number(id)
+
+                    let result = await atorDAO.updateAtor(ator)
+                    if(result){
+                        customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_UPDATE_ITEM.status
+                        customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_UPDATE_ITEM.status_code
+                        customMenssagen.DEFAULT_MESSAGE.mensage = customMenssagen.SUCCESS_UPDATE_ITEM.mensage
+                        customMenssagen.DEFAULT_MESSAGE.response = ator
+
+                        return customMenssagen.DEFAULT_MESSAGE
+                    }else{
+                        return customMenssagen.ERRO_NOT_FONDI
+                    }
+                }else{
+                    return validar
+                }  
+
+            }else{
+                console.log('3')
+                return resultBuscaID
+            }
+  
+        }else{
+            console.log('4')
+            return customMenssagen.ERROR_CONTENT_TYPE
+        }
+
+
+    } catch (error) {
+        console.log(error)
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+}
+
+const buscarAtor = async function(id){
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+
+    try {
+        if(id == undefined || id == null || String(id).replaceAll(" ", '') == '' || isNaN(id)){
+            customMenssagen.ERROR_BAD_REQUEST.field = '[ID] IVALIDO'
+            return customMenssagen.ERROR_BAD_REQUEST
+        
+        }else{
+            let result = await atorDAO.selectByIdAtor(id)
+            if(result){
+                if(result.length > 0){
+                    customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
+                    customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
+                    customMenssagen.DEFAULT_MESSAGE.message = customMenssagen.SUCCESS_RESPOSE.mensagens
+                    customMenssagen.DEFAULT_MESSAGE.response.ator = result
+
+                    return customMenssagen.DEFAULT_MESSAGE
+                }else{
+                    return customMenssagen.ERRO_NOT_FONDI
+                }
+            }else{
+                return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
+            }
+        }
+
+    } catch (error) {
+        
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
+
+}
+
+
+const deletarAtor = async function(id){
+    let customMenssagen = JSON.parse(JSON.stringify(mensagens))
+    try {
+       let buscar = await buscarAtor(id)
+
+        if(buscar.status){
+            let result = await atorDAO.deletAtor(id)
+
+            if(result){
+                
+                customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_DELETE_ITEM.status
+                customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_DELETE_ITEM.status_code
+                customMenssagen.DEFAULT_MESSAGE.message = customMenssagen.SUCCESS_DELETE_ITEM.message
+
+                return customMenssagen.DEFAULT_MESSAGE
+
+            }else{
+                console.log('2');
+                return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
+            }
+        }else{
+            console.log('3');
+            
+            return buscar
+        }
+
+    } catch (error) {
+        console.log(error);
+        
+        return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
+
+    }
+}
+
+
 module.exports = {
-    inserirAtor
+    inserirAtor,
+    listarAtor,
+    atualizarDados,
+    buscarAtor,
+    deletarAtor
 }

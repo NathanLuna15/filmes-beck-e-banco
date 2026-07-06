@@ -12,7 +12,7 @@ const insertAtor = async function(ator){
     try {
             let sql = `insert into tbl_ator (
                     nome,
-                    data_nasimento
+                    data_nacimento
                 ) values (
                     '${ator.nome}',
                     '${ator.data_nacimento}'
@@ -31,9 +31,81 @@ const insertAtor = async function(ator){
     }
 }
 
+const selectAtor = async function(){
+    try {
+        let sql = 'select * from tbl_ator order by id desc;'
+        let result = await knexConection.raw(sql)
+        
+        if(Array.isArray(result)){
+            return result[0]  
+        }else{
+            return false
+        }
 
+    } catch (error) {
+        return false
+    }
+}
+
+const updateAtor = async function (ator){
+    try {
+        let sql = `update tbl_ator set
+                    nome = '${ator.nome}',
+                    data_nacimento = '${ator.data_nacimento}'
+                    where id = ${ator.id};`
+
+        let result = await knexConection.raw(sql)
+        
+        if(result){
+            return true
+        }else{
+            return false
+        }
+        
+    } catch (error) {
+        return false
+    }
+}
+
+const selectByIdAtor = async function(id){
+try {
+    let sql = `select * from tbl_ator where id = ${id};`
+
+    let result = await knexConection.raw(sql)
+    if(Array.isArray(result)){
+        return result[0]
+    }else{
+        return false
+    }
+    
+} catch (error) {
+    return false
+}
+}
+
+const deletAtor = async function(id){
+    try {
+        let sql = `delete from tbl_ator where id=${id}`
+        let result = await knexConection.raw(sql)
+
+        if(result){
+            return true
+        }else{
+            return false
+        }
+
+    } catch (error) {
+        console.log(error);
+        
+        return false
+    }
+}
 
 
 module.exports = {
-    insertAtor
+    insertAtor,
+    selectAtor,
+    updateAtor,
+    selectByIdAtor,
+    deletAtor
 }

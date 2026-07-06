@@ -48,7 +48,7 @@ const SUCCESS_CREATED_ITEM = {
 const ERRO_NOT_FONDI = {
     status: false,
     status_code: 404,
-    message: 'não foram encontrado para retorno para retorno'
+    message: 'não foram encontrado dados para retorno'
 }
 
 const SUCCESS_RESPOSE ={

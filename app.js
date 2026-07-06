@@ -206,6 +206,40 @@ app.post('/v1/senai/locadora/ator', bodyParserJSON, async function(request, resp
     response.json(result)
 })
 
+app.get('/v1/senai/locadora/ator', async function(request, response){
+    let result = await controller_ator.listarAtor()
+
+    response.status(result.status_code)
+    response.json(result)
+}) 
+
+app.get('/v1/senai/locadora/ator/:id', async function(request,response){
+    let id = request.params.id
+    let result = await controller_ator.buscarAtor(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+})
+
+app.put('/v1/senai/locadora/ator/:id', bodyParserJSON, async function(request, response){
+    let ContentType = request.headers['content-type']
+    let id = request.params.id
+    let dados = request.body
+
+    let result = await controller_ator.atualizarDados(dados, id, ContentType)
+    response.status(result.status_code)
+    
+    response.json(result)
+})
+
+app.delete('/v1/senai/locadora/ator/:id', async function(request, response){
+    let id = request.params.id
+    let result = await controller_ator.deletarAtor(id)
+    
+    response.status(result.status_code)
+    response.json(result)
+})
+
 
 
 
