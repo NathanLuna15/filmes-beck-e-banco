@@ -21,6 +21,7 @@ const controllerFilme = require('./controller/filme/controller_filmes.js')
 const controllerGenero = require('./controller/genero/controller_genero.js')
 const controllerClassificacao = require('./controller/classificacao/controller_classificacao.js')
 const controller_sexo = require('./controller/sexo/controller_sexo.js')
+const controller_ator = require ('./controller/ator/controller_ator.js')
 
 
 //EndPoints  filme
@@ -194,9 +195,16 @@ app.get('/v1/senai/locadora/sexo/:id', async function(request,response){
     response.json(result)
 })
 
+/*EndPoints Ator*******************************************/
 
+app.post('/v1/senai/locadora/ator', bodyParserJSON, async function(request, response){
+    let dados = request.body
+    let ContentType = request.headers['content-type']
 
-
+    let result = await controller_ator.inserirAtor(dados,ContentType)
+    response.status(result.status_code)
+    response.json(result)
+})
 
 
 

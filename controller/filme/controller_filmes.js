@@ -60,9 +60,8 @@ const tratarDados = async function (filme) {
     filme.capa = filme.capa.replaceAll("'", "")
     filme.data_lancamento = filme.data_lancamento.replaceAll("'", "")
     filme.duracao = filme.duracao.replaceAll("'", "")
-    filme.valor = filme.valor.replaceAll("'", "")
-    filme.avaliacao = filme.avaliacao.replaceAll("'", "")
-
+    filme.valor = String(filme.valor).replaceAll("'", "")
+    filme.avaliacao = String(filme.avaliacao).replaceAll("'", "")
     return filme
 }
 
@@ -240,9 +239,8 @@ const listarFilme = async function () {
                     }
 
                 }
-
-                /**
-                 * for (filme of result) {
+                
+                     for (filme of result) {
                     //busca na controller o da classificação o ID referente a FK da classificação 
                     let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
                     //Se encontrar
@@ -258,9 +256,9 @@ const listarFilme = async function () {
                     if (resultGeneros.status) {
                         filme.genero = resultGeneros.response.filme_genero
                     }
-
+                                                    
                 }
-                 */
+                 
 
                 customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
                 customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code

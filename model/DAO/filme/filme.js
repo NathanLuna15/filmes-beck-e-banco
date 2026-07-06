@@ -59,12 +59,13 @@ const insertFilme = async function(filme){
 //função para atualizar um filme já existente no banco de dados
 const updateFilmes = async function(filme){
     try {
-        let = sql = `update tbl_filmes set
+        let sql = `update tbl_filmes set
                      nome = '${filme.nome}',
                      sinopse = '${filme.sinopse}',
                      capa = '${filme.capa}',
                      data_lancamento = '${filme.data_lancamento}',
                      valor = '${filme.valor}',
+                     duracao = '${filme.duracao}'
                      avaliacao = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
                      id_classificacao = ${filme.id_classificacao}
                      where id = ${filme.id};`
