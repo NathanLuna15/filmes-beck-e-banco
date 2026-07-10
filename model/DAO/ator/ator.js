@@ -27,6 +27,8 @@ const insertAtor = async function(ator){
     }
 
     } catch (error) {
+        console.log(error);
+        
        return false 
     }
 }

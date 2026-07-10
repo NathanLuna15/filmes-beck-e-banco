@@ -93,14 +93,25 @@ const inserirNovoFilme = async function (filme, ContentType) {
                             "id_genero": itemFilme.id
                         }
 
-                        let resultFilmegenero = await controllerFilmeGenero.inserirNovoGeneroFilme(filmeGenero)
-                        console.log(resultFilmegenero);
+                        let resultFilmeGenero = await controllerFilmeGenero.inserirNovoGeneroFilme(filmeGenero)
+
 
                         if (!resultFilmegenero.status) {
                             return customMenssagen.SUCCESS_CREATED_ITEM_WARING // 201 mas erro de cadastro 
                         }
 
                     }
+
+                    for (let itemAtor of filme.ator){
+                        let filmeAtor = {
+                            "id_filme": filme.id,
+                            "id_ator": itemAtor.id
+                        }
+
+                        let resultFilmeAtor = await co 
+
+                    }
+
 
                     customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_CREATED_ITEM.status
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_CREATED_ITEM.status_code
@@ -240,26 +251,6 @@ const listarFilme = async function () {
 
                 }
                 
-                     for (filme of result) {
-                    //busca na controller o da classificação o ID referente a FK da classificação 
-                    let resultClassificacao = await controllerClassificacao.buscarClassificacao(filme.id_classificacao)
-                    //Se encontrar
-                    if (resultClassificacao.status) {
-                        //Adicionar um atributo classificacao no json do filme e colocar o resultado com os dados da classificacao
-                        filme.classificacao = resultClassificacao.response.classificacao
-                        //Apaga o id_classificacao do JSON de filme
-                        delete filme.id_classificacao
-                    }
-                    //Manipulação de dados para retornar os Generos relacionados aos filmes
-                    let resultGeneros = await controllerFilmeGenero.buscarGenerosIdFilme(filme.id)
-
-                    if (resultGeneros.status) {
-                        filme.genero = resultGeneros.response.filme_genero
-                    }
-                                                    
-                }
-                 
-
                 customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
                 customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
                 customMenssagen.DEFAULT_MESSAGE.response.filme = result
