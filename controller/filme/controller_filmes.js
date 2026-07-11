@@ -10,9 +10,8 @@ const mensagens = require('../modulo/configMensassages.js')
 
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 const controllerFilmeGenero = require('./controller_filme_genero.js')
-let controllerFilmeAtor = require('./controller_ator_filme.js')
-
-//controllers
+const controllerFilmeAtor = require('./controller_ator_filme.js')
+const controllerAtor = require('../ator/controller_ator.js')
 const controllerclassificacao = require('../classificacao/controller_classificacao.js')
 
 const validarDados = async function (filme) {
@@ -97,7 +96,7 @@ const inserirNovoFilme = async function (filme, ContentType) {
                         let resultFilmeGenero = await controllerFilmeGenero.inserirNovoGeneroFilme(filmeGenero)
 
 
-                        if (!resultFilmegenero.status) {
+                        if (!resultFilmeGenero.status) {
                             return customMenssagen.SUCCESS_CREATED_ITEM_WARING // 201 mas erro de cadastro 
                         }
 
@@ -109,7 +108,7 @@ const inserirNovoFilme = async function (filme, ContentType) {
                             "id_ator": itemAtor.id
                         }
 
-                        let resultFilmeAtor = await controllerFilmeAtor.inserirNovoAtorFilme(itemAtor)
+                        let resultFilmeAtor = await controllerFilmeAtor.inserirNovoAtorFilme(filmeAtor)
 
                         if(!resultFilmeAtor.status){
                             return customMenssagen.SUCCESS_CREATED_ITEM_WARING
@@ -188,7 +187,7 @@ const atualizarFilme = async function (filme, id, ContentType) {
                                     "id_filme": filme.id,
                                     "id_ator": itemfilme.id 
                                 }
-                                let resultFilmeAtor = await controllerFilmeAtor.inserirNovoAtorFilme(itemfilme)
+                                let resultFilmeAtor = await controllerFilmeAtor.inserirNovoAtorFilme(filmeAtor)
                                 if (!resultFilmeAtor.status){
                                     return customMenssagen.SUCCESS_CREATED_ITEM_WARING
                                 }
@@ -254,18 +253,26 @@ const listarFilme = async function () {
                         //apaga o id_classificação
                         delete filme.id_classificacao
                     }
-                    // Manipulação de dados para retornar o filme\WZAXSERCDVFTGYBNHUMJIKO
+                    // Manipulação de dados para retornar o filme...
 
+                    //Genero
                     let resultGenero = await controllerFilmeGenero.buscarFilmeGeneroIdfilme(filme.id)
-                    // buscarFilmeGeneroIdfilme
-                    // console.log(resultGenero);
 
                     if (resultGenero.status) {
                         filme.genero = resultGenero.response.filme
                     }
 
+                    // Ator
+                    let resultAtor = await controllerFilmeAtor.buscarFilmeAtorIdfilme(filme.id)
+
+                    if(resultAtor.status){
+                        filme.ator = resultAtor.response.filme
+                    }
+
                 }
-                
+                    
+
+
                 customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
                 customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
                 customMenssagen.DEFAULT_MESSAGE.response.filme = result
@@ -378,3 +385,4 @@ module.exports = {
     excluirFilme,
     tratarDados
 }
+

@@ -12,7 +12,7 @@ const insertFilmeAtor = async function(filmeAtor){
    try {
     
     let sql = `insert into tbl_filme_ator (
-                    id_filmes,
+                    id_filme,
                     id_ator
                 ) values (
                     '${filmeAtor.id_filme}',
@@ -90,7 +90,7 @@ const selectAtorByIdFilme = async function(idFimeAtor){
         let sql = `select tbl_ator.*
                     from tbl_filmes
                         inner join tbl_filme_ator
-                            on tbl_filmes.id = tbl_filme_ator.id_filmes
+                            on tbl_filmes.id = tbl_filme_ator.id_filme
                         inner join tbl_ator
                             on tbl_ator.id = tbl_filme_ator.id_ator
                     where tbl_filmes.id = ${idFimeAtor};`
@@ -116,8 +116,8 @@ const selectFilmesByIdAtor = async function(idAtor){
     try {
         let sql = ` select tbl_filmes.*
                     from tbl_filmes
-                        inner join tbl_filmes_ator 
-                            on tbl_filmes.id = tbl_filmes_ator.id_filmes 
+                        inner join tbl_filme_ator 
+                            on tbl_filmes.id = tbl_filme_ator.id_filme
                     where tbl_filmes_id = ${idAtor};`
     
         let result = await knexConection.raw(sql)
@@ -136,7 +136,7 @@ const selectFilmesByIdAtor = async function(idAtor){
 
 const deletFilmeAtor = async function(id){
     try {
-        let sql = `delete from tbl_filmes_ator where id=${id}`
+        let sql = `delete from tbl_filme_ator where id=${id}`
         let result = await knexConection.raw(sql)
 
         if(result){
@@ -153,7 +153,7 @@ const deletFilmeAtor = async function(id){
 }
 const deletAtorsByIdFilme = async function(idFilme){
     try {
-        let sql = `delete from tbl_filme_ator where id_filmes=${idFilme}`
+        let sql = `delete from tbl_filme_ator where id_filme=${idFilme}`
         let result = await knexConection.raw(sql)
 
         if(result){
