@@ -10,6 +10,7 @@ const mensagens = require('../modulo/configMensassages.js')
 
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 const controllerFilmeGenero = require('./controller_filme_genero.js')
+let controllerFilmeAtor = require('./controller_ator_filme.js')
 
 //controllers
 const controllerclassificacao = require('../classificacao/controller_classificacao.js')
@@ -108,7 +109,11 @@ const inserirNovoFilme = async function (filme, ContentType) {
                             "id_ator": itemAtor.id
                         }
 
-                        let resultFilmeAtor = await co 
+                        let resultFilmeAtor = await controllerFilmeAtor.inserirNovoAtorFilme(itemAtor)
+
+                        if(!resultFilmeAtor.status){
+                            return customMenssagen.SUCCESS_CREATED_ITEM_WARING
+                        }
 
                     }
 
@@ -118,6 +123,8 @@ const inserirNovoFilme = async function (filme, ContentType) {
                     customMenssagen.DEFAULT_MESSAGE.menssage = customMenssagen.SUCCESS_CREATED_ITEM.menssage
                     customMenssagen.DEFAULT_MESSAGE.response = filme
                 } else {//500
+                    console.log("1");
+                    
                     return customMenssagen.ERROR_INTERNAL_SERVER_MODEL//500
                 }
 
@@ -146,21 +153,15 @@ const atualizarFilme = async function (filme, id, ContentType) {
             //chama a função validarFilme e validar se o ID esta correto
             //se o ID existe no BD e se o filme existe
             let resultBuscarFilme = await buscarFilme(id)
-            console.log(resultBuscarFilme);
             
             if (resultBuscarFilme.status) {
                 let validar = await validarDados(filme)
-                console.log(`oi${validar}`);
 
                 if (!validar) {
-
-
                     // chama a função para atualizar o filme no BD
-                    let result = await filmeDAO.updateFilmes(filme)
-                    console.log(result);
+                    let result = await filmeDAO.updateFilmes(filme)                    
                     
                     if (result) {
-
                         //excluir as relações entre o filme e os generos(tabelas de relação)
                         let resultDeletGenero = await controllerFilmeGenero.excluirGeneroIdFilme(filme.id)
                         if (resultDeletGenero.status) {
@@ -178,6 +179,20 @@ const atualizarFilme = async function (filme, id, ContentType) {
                                 }
 
                             }
+                        }
+
+                        let resultDeletAtor = await controllerFilmeAtor.excluirAtorIdFilme(filme.id)
+                        if(resultDeletAtor.status){
+                            for(let itemfilme of filme.ator){
+                                let filmeAtor = {
+                                    "id_filme": filme.id,
+                                    "id_ator": itemfilme.id 
+                                }
+                                let resultFilmeAtor = await controllerFilmeAtor.inserirNovoAtorFilme(itemfilme)
+                                if (!resultFilmeAtor.status){
+                                    return customMenssagen.SUCCESS_CREATED_ITEM_WARING
+                                }
+                            }                                                                                                                                                                                                                                                                                                                                                                     
                         }
 
                         customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_UPDATE_ITEM.status

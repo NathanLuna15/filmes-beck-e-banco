@@ -2,6 +2,7 @@
 const mensagens = require('../modulo/configMensassages.js')
 
 const filmeAtorDAO = require('../../model/DAO/ator_filame/ator_filme.js')
+const controller_filme = require('./controller_filmes.js')
 
 //controllers
 const controller_ator = require('../ator/controller_ator.js')
@@ -40,7 +41,8 @@ const inserirNovoAtorFilme = async function (filmeAtor) {
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_CREATED_ITEM.status_code
                     customMenssagen.DEFAULT_MESSAGE.menssage = customMenssagen.SUCCESS_CREATED_ITEM.menssage
                     customMenssagen.DEFAULT_MESSAGE.response = filmeAtor
-                } else {//500
+                } else {
+                    console.log("2");
                     return customMenssagen.ERROR_INTERNAL_SERVER_MODEL//500
                 }
 
@@ -76,28 +78,22 @@ const atualizarFilmeAtor = async function (filmeAtor, id) {
                         customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_UPDATE_ITEM.status_code
                         customMenssagen.DEFAULT_MESSAGE.mensage = customMenssagen.SUCCESS_UPDATE_ITEM.mensage
                         customMenssagen.DEFAULT_MESSAGE.response = filmeAtor
-                        console.log('1');
 
                         return customMenssagen.DEFAULT_MESSAGE
                     } else {
-                        console.log('2');
 
                         return customMenssagen.ERROR_INTERNAL_SERVER_MODEL // 404
                     }
                 } else {
-                    console.log('3');
                     return validar // 500 model
                 }
 
             } else {
-                console.log('4');
                 return resultBuscarAtorFilme // 400(ID invalido) ou 400(não encontrado) ou 500 
             }
 
     } catch (error) {
-        console.log(error)
         // console.log('1');
-        
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER //500
 
     }
@@ -143,16 +139,16 @@ const buscarFilmeAtor = async function (filmeAtor) {
                 if (result.length > 0) {
 
                     for(let filme of result){
-                        // busca na controller da classificação o ID referente a FK da classificação
-                        let resultClassificacao = await controller_ator.buscarFilmeAtor(filme.id_classificacao)
+                        // busca na controller do ador o ID referente a FK do ator
+                        let resultAtor = await controller_ator.buscarFilmeAtor(filme.id_ator)
                         
                         // se encontrar o id
-                        if(resultClassificacao.status){
-                            //adiciona um atributo na classificação no JSON do filme e colar o resultado com os dados da 
-                            //classificação
-                            filme.classificacao = resultClassificacao.response.classificacao
-                            //apaga o id_classificação
-                            delete filme.id_classificacao
+                        if(resultAtor.status){
+                            //adiciona um atributo no ator no JSON do filme e colar o resultado com os dados do 
+                            //ator
+                            filme.ator = resultAtor.response.aotr
+                            //apaga o id_ator
+                            delete filme.id_ator
                         }
                     }
 
@@ -173,16 +169,16 @@ const buscarFilmeAtor = async function (filmeAtor) {
     }
 }
 
-const buscarFilmeGeneroIdGenero = async function (filmeGenero) {
+const buscarFilmeAtorIdAtor = async function (filmeAtor) {
     
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
     
      try {               
-        if (filmeGenero == undefined || String(filmeGenero).replaceAll(' ', '') == '' || filmeGenero == null || isNaN(filmeGenero)) {
+        if (filmeAtor == undefined || String(filmeAtor).replaceAll(' ', '') == '' || filmeAtor == null || isNaN(filmeAtor)) {
             customMenssagen.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
             return customMenssagen.ERROR_BAD_REQUEST
         } else {
-            let result = await filmeAtorDAO.selectByIdFilmeGenero(filmeGenero)
+            let result = await filmeAtorDAO.selectAtorByIdFilme(filmeAtor)
             if (result) {
 
                 if (result.length > 0) {
@@ -204,7 +200,7 @@ const buscarFilmeGeneroIdGenero = async function (filmeGenero) {
     }
 }
 
-const buscarFilmeGeneroIdfilme = async function (idFilme) {
+const buscarFilmeAtorIdfilme = async function (idFilme) {
     // console.log(idFilme);
     
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
@@ -214,7 +210,7 @@ const buscarFilmeGeneroIdfilme = async function (idFilme) {
             customMenssagen.ERROR_BAD_REQUEST.field = '[ID] INVALIDO'
             return customMenssagen.ERROR_BAD_REQUEST
         } else {
-            let result = await filmeAtorDAO.selectGeneroByIdFilme(idFilme)
+            let result = await filmeAtorDAO.selectAtorByIdFilme(idFilme)
             if (result) {
 
                 if (result.length > 0) {
@@ -237,15 +233,15 @@ const buscarFilmeGeneroIdfilme = async function (idFilme) {
     }
 }
 
-const excluirFilmeGenero = async function (id) {
+const excluirFilmeAtor = async function (id) {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
     try {
         //chama a função de buscar filme para validar se o filme existe
-        let resultBuscarFilme = await buscarFilme(id)
+        let resultBuscarFilme = await controller_filme.buscarFilme (id)
 
         if (resultBuscarFilme.status) {
-            let result = await filmeDAO.deletFilme(id)
+            let result = await controller_filme.deletFilme(id)
             if (result) {
                 customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_DELETE_ITEM.status
                 customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_DELETE_ITEM.status_code
@@ -253,7 +249,7 @@ const excluirFilmeGenero = async function (id) {
 
                 return customMenssagen.DEFAULT_MESSAGE
             } else {
-                        return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
+                return customMenssagen.ERROR_INTERNAL_SERVER_MODEL
             }
 
         } else {
@@ -266,7 +262,7 @@ const excluirFilmeGenero = async function (id) {
 }
 
 // função para excluir a relação de genero do filme
-const excluirGeneroIdFilme = async function (idFilme) {
+const excluirAtorIdFilme = async function (idFilme) {
     let customMenssagen = JSON.parse(JSON.stringify(mensagens))
 
     try {
@@ -290,12 +286,13 @@ const excluirGeneroIdFilme = async function (idFilme) {
 
 
 module.exports = {
-    inserirNovoGeneroFilme,
-    atualizarFilmeGenero,
-    listarFilmeGenero,
-    buscarFilmeGenero,
-    excluirFilmeGenero,
-    buscarFilmeGeneroIdGenero,
-    buscarFilmeGeneroIdfilme,
-    excluirGeneroIdFilme
+
+    inserirNovoAtorFilme,
+    atualizarFilmeAtor,
+    listarFilmeAtor,
+    buscarFilmeAtor,
+    buscarFilmeAtorIdAtor,
+    buscarFilmeAtorIdfilme,
+    excluirFilmeAtor,
+    excluirAtorIdFilme
 }

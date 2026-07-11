@@ -65,7 +65,9 @@ create table tbl_clacificacao(
 	id int not null auto_increment primary key,
     clacificacao varchar(6) not null
 );
-
+alter table tbl_clacificacao rename to tbl_classificacao;
+ALTER TABLE tbl_classificacao CHANGE COLUMN clacificacao  classificacao VARCHAR(6);
+ALTER TABLE tbl_classificacao CHANGE COLUMN classificacao  classificacao VARCHAR(40);
 
 create table tbl_nacionalidade(
 	id int not null auto_increment primary key,
@@ -84,4 +86,40 @@ create table tbl_sexo(
     sigla varchar(3) not null
 );
 
+create table tbl_ator(
+	id int not null auto_increment primary key,
+	nome varchar(100)  not null,
+    data_nacimento date not null
+    
+);
 
+CREATE TABLE tbl_filme_genero (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_filmes INT NOT NULL,
+    id_genero INT NOT NULL,
+    FOREIGN KEY (id_filmes) REFERENCES tbl_filmes(id),
+    FOREIGN KEY (id_genero) REFERENCES tbl_genero(id)
+);
+
+
+create table tbl_filme_ator(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id_filme int not null,
+    id_ator int not null,
+    
+    constraint FK_FILMEATOR_FILME 
+    FOREIGN KEY (id_filme) REFERENCES tbl_filmes(id),
+    
+	constraint FK_FILMEATOR_ATOR
+    FOREIGN KEY (id_ator) REFERENCES tbl_ator(id)
+);
+
+DESCRIBE tbl_filmes;
+ALTER TABLE tbl_filmes ADD COLUMN id_classificacao INT;
+
+desc tbl_genero;
+
+desc tables;
+DESCRIBE tbl_classificacao;
+show table status;
+show databases;

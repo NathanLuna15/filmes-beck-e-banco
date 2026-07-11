@@ -5,7 +5,7 @@ const classificacaoDAO = require('../../model/DAO/classificacao/classificacao.js
 const validarDados = async function(classificacao){
     let custonMenssagen = JSON.parse(JSON.stringify(mensagens))
 
-    if(classificacao.classificacao == undefined || classificacao.classificacao == null || classificacao.classificacao == '' || classificacao.classificacao.length == 6 ){
+    if(classificacao.classificacao == undefined || classificacao.classificacao == null || classificacao.classificacao == '' || classificacao.classificacao.length == 40 ){
         return custonMenssagen.ERROR_BAD_REQUEST.field = '[CLASSIFICAÇÃO]  INVALIDA'
     }else{
         return false
