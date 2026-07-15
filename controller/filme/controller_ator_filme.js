@@ -217,7 +217,7 @@ const buscarFilmeAtorIdfilme = async function (idFilme) {
 
                     customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_RESPOSE.status
                     customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_RESPOSE.status_code
-                    customMenssagen.DEFAULT_MESSAGE.response.idFilme = result
+                    customMenssagen.DEFAULT_MESSAGE.response.filme = result
                     return customMenssagen.DEFAULT_MESSAGE
                 } else {
                     return customMenssagen.ERRO_NOT_FONDI
@@ -295,4 +295,5 @@ module.exports = {
     buscarFilmeAtorIdfilme,
     excluirFilmeAtor,
     excluirAtorIdFilme
+      
 }

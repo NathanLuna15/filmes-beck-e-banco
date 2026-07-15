@@ -65,7 +65,7 @@ const updateFilmes = async function(filme){
                      capa = '${filme.capa}',
                      data_lancamento = '${filme.data_lancamento}',
                      valor = '${filme.valor}',
-                     duracao = '${filme.duracao}'
+                     duracao = '${filme.duracao}',
                      avaliacao = if('${filme.avaliacao}' = '', null, '${filme.avaliacao}'),
                      id_classificacao = ${filme.id_classificacao}
                      where id = ${filme.id};`
@@ -99,6 +99,8 @@ const selectAllFilme = async function(){
         }
 
     } catch (error) {
+        console.log(error);
+        
         return false
     }
 }
@@ -133,6 +135,7 @@ const deletFilme = async function(id){
         }
 
     } catch (error) {
+        çconsole.log(error);
         return false
     }
 }

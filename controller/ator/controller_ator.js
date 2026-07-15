@@ -53,7 +53,7 @@ const inserirAtor = async function(ator, ContentType) {
         }
 
     } catch (error) {
-        console.log("4");
+        console.log(error);
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -119,7 +119,7 @@ const atualizarDados = async function(ator, id, ContentType){
             }
   
         }else{
-            console.log('4')
+            console.log('4 ator')
             return customMenssagen.ERROR_CONTENT_TYPE
         }
 

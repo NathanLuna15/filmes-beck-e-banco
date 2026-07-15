@@ -152,7 +152,7 @@ const atualizarFilme = async function (filme, id, ContentType) {
             //chama a função validarFilme e validar se o ID esta correto
             //se o ID existe no BD e se o filme existe
             let resultBuscarFilme = await buscarFilme(id)
-            
+
             if (resultBuscarFilme.status) {
                 let validar = await validarDados(filme)
 
@@ -212,7 +212,7 @@ const atualizarFilme = async function (filme, id, ContentType) {
                 }
 
             } else {
-                console.log('4');
+                console.log('4 controller filme');
                 return resultBuscarFilme // 400(ID invalido) ou 400(não encontrado) ou 500 
             }
 
@@ -322,11 +322,15 @@ const buscarFilme = async function (id) {
                         }
 
                         let resultGenero = await controllerFilmeGenero.buscarFilmeGeneroIdfilme(filme.id)
-                        // buscarFilmeGeneroIdfilme
-                        // console.log(resultGenero);
 
                         if (resultGenero.status) {
                             filme.genero = resultGenero.response.filme
+                        }
+
+                        let resultAtor = await controllerFilmeAtor.buscarFilmeAtorIdfilme(filme.id)
+
+                        if (resultAtor.status) {
+                            filme.ator = resultAtor.response.filme
                         }
                     }
 
