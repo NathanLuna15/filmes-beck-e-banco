@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineList — Catálogo de Filmes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- ===================== HEADER / MARQUISE ===================== -->
+  <header class="marquee">
+    <div class="marquee__bulbs" aria-hidden="true"></div>
+    <div class="marquee__content">
+      <span class="marquee__eyebrow">Acervo pessoal</span>
+      <h1 class="marquee__title">CineList</h1>
+      <p class="marquee__subtitle">Cadastre, edite e organize seu catálogo de filmes</p>
+    </div>
+    <div class="marquee__bulbs marquee__bulbs--bottom" aria-hidden="true"></div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ===================== TOOLBAR ===================== -->
+    <section class="toolbar">
+      <label class="field field--search">
+        <svg class="field__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input type="search" id="searchInput" placeholder="Buscar por título...">
+      </label>
+
+      <label class="field field--select">
+        <span class="field__label">Gênero</span>
+        <select id="filterGenero">
+          <option value="">Todos</option>
+        </select>
+      </label>
+
+      <button id="btnNovoFilme" class="btn btn--primary">
+        <span class="btn__plus">+</span> Novo filme
+      </button>
+    </section>
+
+    <!-- ===================== STATUS / FEEDBACK ===================== -->
+    <p id="apiStatus" class="api-status" hidden></p>
+
+    <!-- ===================== GRID DE FILMES ===================== -->
+    <section id="grid" class="grid" aria-live="polite"></section>
+
+    <p id="emptyState" class="empty-state" hidden>
+      🎬 Nenhum filme por aqui ainda. Que tal cadastrar o primeiro?
+    </p>
+
+    <p id="loadingState" class="loading-state">
+      Carregando o catálogo...
+    </p>
+
+  </main>
+
+  <footer class="footer">
+    <p>Projeto de portfólio — consumindo a API própria de filmes.</p>
+  </footer>
+
+  <!-- ===================== MODAL: FORMULÁRIO (criar/editar) ===================== -->
+  <div id="modalForm" class="modal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel ticket-panel" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+      <button type="button" class="modal__close" data-close aria-label="Fechar">&times;</button>
+
+      <h2 id="formTitle" class="ticket-panel__title">Novo filme</h2>
+
+      <form id="filmeForm" novalidate>
+        <input type="hidden" id="filmeId">
+
+        <div class="form-grid">
+
+          <label class="form-field form-field--full">
+            <span>Título</span>
+            <input type="text" id="fNome" maxlength="80" required placeholder="Ex: Círculo de Fogo">
+          </label>
+
+          <label class="form-field form-field--full">
+            <span>Sinopse</span>
+            <textarea id="fSinopse" rows="4" required placeholder="Do que se trata o filme?"></textarea>
+          </label>
+
+          <label class="form-field form-field--full">
+            <span>URL da capa</span>
+            <input type="url" id="fCapa" required placeholder="https://...">
+          </label>
+
+          <label class="form-field">
+            <span>Lançamento</span>
+            <input type="date" id="fDataLancamento" required>
+          </label>
+
+          <label class="form-field">
+            <span>Duração</span>
+            <input type="time" id="fDuracao" required>
+          </label>
+
+          <label class="form-field">
+            <span>Valor (R$)</span>
+            <input type="number" id="fValor" min="0" max="999.99" step="0.01" required placeholder="0,00">
+          </label>
+
+          <label class="form-field">
+            <span>Avaliação (0 a 9.9)</span>
+            <input type="number" id="fAvaliacao" min="0" max="9.9" step="0.1" required placeholder="0.0">
+          </label>
+
+          <label class="form-field form-field--full">
+            <span>Classificação indicativa</span>
+            <select id="fClassificacao" required>
+              <option value="">Selecione...</option>
+            </select>
+          </label>
+
+          <fieldset class="form-field form-field--full">
+            <legend>Gênero(s)</legend>
+            <div id="fGeneroList" class="chip-list"></div>
+          </fieldset>
+
+          <fieldset class="form-field form-field--full">
+            <legend>Ator(es) <span class="optional">— opcional</span></legend>
+            <div id="fAtorList" class="chip-list"></div>
+          </fieldset>
+
+        </div>
+
+        <p id="formError" class="form-error" hidden></p>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+          <button type="submit" class="btn btn--primary" id="btnSalvar">Salvar filme</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: DETALHES ===================== -->
+  <div id="modalDetail" class="modal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel detail-panel" role="dialog" aria-modal="true">
+      <button type="button" class="modal__close" data-close aria-label="Fechar">&times;</button>
+      <div id="detailContent" class="detail-content"></div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: CONFIRMAÇÃO DE EXCLUSÃO ===================== -->
+  <div id="modalConfirm" class="modal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel confirm-panel" role="dialog" aria-modal="true">
+      <p>Excluir <strong id="confirmNome"></strong> do catálogo? Essa ação não pode ser desfeita.</p>
+      <div class="form-actions">
+        <button type="button" class="btn btn--ghost" data-close>Cancelar</button>
+        <button type="button" class="btn btn--danger" id="btnConfirmDelete">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TOAST ===================== -->
+  <div id="toast" class="toast" hidden></div>
+
+</body>
+</html>
