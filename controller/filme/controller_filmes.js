@@ -4,13 +4,12 @@
     autor: nathan 
     versão: 1.0
 */
-
 //inporte do arquivo de comfigurações de mensagens do projeto
 const mensagens = require('../modulo/configMensassages.js')
 
 const filmeDAO = require('../../model/DAO/filme/filme.js')
-const controllerFilmeGenero = require('./controller_filme_genero.js')
-const controllerFilmeAtor = require('./controller_ator_filme.js')
+const controllerFilmeGenero = require('../filme/controller_filme_genero.js')
+const controllerFilmeAtor = require('../filme/controller_ator_filme.js')
 const controllerAtor = require('../ator/controller_ator.js')
 const controllerclassificacao = require('../classificacao/controller_classificacao.js')
 
@@ -358,6 +357,9 @@ const excluirFilme = async function (id) {
         //chama a função de buscar filme para validar se o filme existe
         let resultBuscarFilme = await buscarFilme(id)
 
+        await controllerFilmeGenero.excluirGeneroIdFilme(id)
+        await controllerFilmeAtor.excluirAtorIdFilme(id)
+
         if (resultBuscarFilme.status) {
             let result = await filmeDAO.deletFilme(id)
             if (result) {
@@ -375,6 +377,7 @@ const excluirFilme = async function (id) {
         }
 
     } catch (error) {
+        console.log(error);
         return customMenssagen.ERROR_INTERNAL_SERVER_CONTROLLER//500
     }
 }

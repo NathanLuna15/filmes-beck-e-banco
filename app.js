@@ -8,10 +8,9 @@ const bodyParserJSON = bodyParser.json()
 const app = express()
 
 const corsOpitions = {
-    origin: ["*"], //configuração  de origem da requisicão (IP ou dominio)
-    methods: "GET, POST, PUT, DELETE, OPTIONS", //configiração dos verbos que serão utilizado na API
-    allowedHeaders: ["Content-type", "Authorization"] //configuração de permossoes
-                    //tipo de dado   //autorização de acesso
+    origin: "*",   
+    methods: "GET, POST, PUT, DELETE, OPTIONS",
+    allowedHeaders: ["Content-type", "Authorization"]
 }
 
 // aplica as configurações do cors no app (EXPRES)
