@@ -1,14 +1,6 @@
-/* =====================================================================
-   CineList — script.js
-   ---------------------------------------------------------------------
-   Para plugar na sua API, você só deveria precisar mexer no bloco
-   CONFIG abaixo (e, se o formato do JSON mudar, nas funções da seção
-   "NORMALIZAÇÃO", que é onde toda a leitura do shape da resposta
-   está concentrada).
-   ===================================================================== */
 
 /* =====================================================================
-   1. CONFIG — troque só isto se a URL da API mudar
+   1. CONFIG 
    ===================================================================== */
 const CONFIG = {
   API_BASE_URL: "http://localhost:8080/v1/senai/locadora",
@@ -70,8 +62,66 @@ const dom = {
   confirmNome: document.getElementById("confirmNome"),
   btnConfirmDelete: document.getElementById("btnConfirmDelete"),
 
+  modalAtor: document.getElementById("modalAtor"),
+  btnNovoAtor: document.getElementById("btnNovoAtor"),
+  atorForm: document.getElementById("atorForm"),
+  fAtorNome: document.getElementById("fAtorNome"),
+  fAtorData: document.getElementById("fAtorData"),
+  atorFormError: document.getElementById("atorFormError"),
+  btnSalvarAtor: document.getElementById("btnSalvarAtor"),
+
   toast: document.getElementById("toast"),
 };
+
+
+function fecharModais() {
+  [dom.modalForm, dom.modalDetail, dom.modalConfirm, dom.modalAtor].forEach((m) => (m.hidden = true));
+  document.body.style.overflow = "";
+}
+
+
+dom.btnNovoAtor.addEventListener("click", () => {
+  dom.atorForm.reset();
+  dom.atorFormError.hidden = true;
+  abrirModal(dom.modalAtor);
+});
+
+dom.atorForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  dom.atorFormError.hidden = true;
+
+  const nome = dom.fAtorNome.value.trim();
+  const dataNascimento = dom.fAtorData.value;
+
+  if (!nome) {
+    dom.atorFormError.textContent = "Digite o nome do ator.";
+    dom.atorFormError.hidden = false;
+    return;
+  }
+  if (!dataNascimento) {
+    dom.atorFormError.textContent = "Selecione a data de nascimento do ator.";
+    dom.atorFormError.hidden = false;
+    return;
+  }
+
+  dom.btnSalvarAtor.disabled = true;
+  dom.btnSalvarAtor.textContent = "Salvando...";
+
+  try {
+    const body = await api.criarAtor({ nome, data_nacimento: dataNascimento });
+    const novoAtor = normalizarAtor(body.response);
+
+    state.atores.push(novoAtor);
+    mostrarToast(`Ator "${novoAtor.nome}" cadastrado.`, "success");
+    fecharModais();
+  } catch (erro) {
+    dom.atorFormError.textContent = erro.message;
+    dom.atorFormError.hidden = false;
+  } finally {
+    dom.btnSalvarAtor.disabled = false;
+    dom.btnSalvarAtor.textContent = "Salvar ator";
+  }
+});
 
 /* =====================================================================
    4. CLIENTE HTTP — wrapper fino sobre fetch
@@ -121,6 +171,8 @@ const api = {
   listarGeneros: () => apiRequest(CONFIG.ENDPOINTS.genero),
   listarClassificacoes: () => apiRequest(CONFIG.ENDPOINTS.classificacao),
   listarAtores: () => apiRequest(CONFIG.ENDPOINTS.ator),
+  criarAtor: (payload) =>
+  apiRequest(CONFIG.ENDPOINTS.ator, { method: "POST", body: JSON.stringify(payload) }),
 };
 
 /* =====================================================================

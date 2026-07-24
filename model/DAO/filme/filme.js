@@ -135,7 +135,7 @@ const deletFilme = async function(id){
         }
 
     } catch (error) {
-        çconsole.log(error);
+        console.log(error);
         return false
     }
 }

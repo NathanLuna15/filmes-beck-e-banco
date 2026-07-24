@@ -124,7 +124,7 @@ const listarFilmeGenero = async function () {
                     if(resultClassificacao.status){
                         //adiciona um atributo na classificação no JSON do filme e colar o resultado com os dados da 
                         //classificação
-                        filme.classificacao = resultClassificacao.response.classificacao
+                        filme.classificacao = resultClassificacao.response.classificacao[0]?.classificacao
                         //apaga o id_classificação
                         delete filme.id_classificacao
                     }
@@ -168,7 +168,7 @@ const buscarFilmeGenero = async function (filmeGenero) {
                         if(resultClassificacao.status){
                             //adiciona um atributo na classificação no JSON do filme e colar o resultado com os dados da 
                             //classificação
-                            filme.classificacao = resultClassificacao.response.classificacao
+                            filme.classificacao = resultClassificacao.response.classificacao[0]?.classificacao
                             //apaga o id_classificação
                             delete filme.id_classificacao
                         }

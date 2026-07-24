@@ -34,6 +34,10 @@
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
 }
 
+.actor-panel { text-align: left; }
+.actor-panel .form-field { margin-top: 16px; }
+.actor-panel .form-actions { margin-top: 24px; }
+
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }

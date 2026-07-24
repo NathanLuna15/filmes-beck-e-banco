@@ -267,7 +267,7 @@ const excluirAtorIdFilme = async function (idFilme) {
 
     try {
 
-            let result = await filmeAtorDAO.deletGenerosByIdFilme(idFilme)
+            let result = await filmeAtorDAO.deletAtorsByIdFilme(idFilme)
             if (result) {
                 customMenssagen.DEFAULT_MESSAGE.status = customMenssagen.SUCCESS_DELETE_ITEM.status
                 customMenssagen.DEFAULT_MESSAGE.status_code = customMenssagen.SUCCESS_DELETE_ITEM.status_code
